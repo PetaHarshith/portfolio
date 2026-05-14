@@ -15,10 +15,10 @@ export const projects: Project[] = [
   {
     id: "truthgap",
     name: "TruthGap",
-    tagline: "AI documentation checker that catches docs lying about code.",
+    tagline: "AI documentation checker that flags when docs drift from code.",
     problem: "READMEs, API docs, and example commands silently drift from the codebase.",
     solution:
-      "Combines rule-based checks with LLM claim extraction over a seeded benchmark of 30+ doc bugs; returns the broken claim, source-file evidence, and a suggested fix.",
+      "Combines rule-based extraction with structured LLM claim checking, grounded against the source via the GitHub API. Returns the broken claim, the line of code that disproves it, and a suggested fix. Early-stage build.",
     stack: ["TypeScript", "Next.js", "PostgreSQL", "GitHub API", "LLMs"],
     date: "May 2026 — Present",
     status: "WIP",

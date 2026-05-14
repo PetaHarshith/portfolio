@@ -22,7 +22,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
     eyebrow: "DROP_01 · WIP · May 2026 → present",
     subhead: "An AI documentation checker that catches READMEs telling fairy tales about your code.",
     intro:
-      "Code lies. Documentation lies harder. The README on my own laptop is wrong by Tuesday. TruthGap is what happens when you decide that's an unacceptable engineering hygiene problem and try to fix it with a benchmark, a rule engine, and an LLM you don't fully trust.",
+      "Code drifts. Documentation drifts faster. TruthGap is an early-stage project trying to fix that — combining a rule engine, structured LLM claim extraction, and a benchmark to actually measure whether the checker works. Just started this month.",
     blocks: [
       { type: "h", text: "Every README I've ever shipped lied to someone" },
       {
@@ -35,38 +35,30 @@ export const projectDetails: Record<string, ProjectDetail> = {
         label: "THE THESIS",
         text: "Documentation accuracy should not depend on a human noticing. It should be a check that fails in CI, just like a broken test.",
       },
-      { type: "h", text: "Why 'just ask GPT-4 to read it' doesn't work" },
+      { type: "h", text: "Why 'just ask GPT to read it' is the wrong shape" },
       {
         type: "p",
-        text: "The naive version of this is one prompt: 'here's the README, here's the codebase, find the lies.' I tried it. It hallucinates with the confidence of a senior engineer at a standup — it'll tell you a function doesn't exist when it does, miss a renamed env var, and invent a config key that was never on the repo. LLMs are pattern matchers, not auditors. You can't trust them to ground their claims without giving them a way to actually look.",
+        text: "The naive version is one prompt: 'here's the README, here's the codebase, find the lies.' LLMs are pattern matchers, not auditors. Without a structured way to ground each claim against the actual code, you get confident-sounding output that misses renamed env vars and invents config keys that don't exist. The interesting engineering is in the grounding step, not the prompt.",
       },
-      { type: "h", text: "How TruthGap actually works" },
+      { type: "h", text: "The intended design" },
       {
         type: "list",
         items: [
           "Rule-based pass first — extract every code block, command, file path, API endpoint, and config key the README references.",
           "LLM claim extraction with structured output — each claim has a verb (\"this command does X\", \"this endpoint accepts Y\"), a target (a file, a route, a flag), and a quote from the docs.",
           "Ground each claim against the real codebase via the GitHub API — does the file exist? does the command resolve? is the route still wired up?",
-          "Return the broken claim, the source-file evidence (a real line of real code), and a suggested fix. Not a vibes-based critique — receipts.",
+          "Return the broken claim, the source-file evidence (a real line of real code), and a suggested fix. Not vibes — receipts.",
         ],
       },
-      { type: "h", text: "The benchmark" },
+      { type: "h", text: "The benchmark (planned)" },
       {
         type: "p",
-        text: "Models are easy to demo. They're hard to evaluate. So I seeded a public repo with 30+ intentional documentation bugs across categories: broken commands, outdated config keys, removed endpoints, renamed functions, stale example output, dead links. Each bug has a fix-of-record. TruthGap's score is precision and recall against that ground truth — not a vibes check, not a screenshot, not a tweet thread.",
-      },
-      {
-        type: "stats",
-        items: [
-          { label: "BENCHMARK BUGS", value: "30+" },
-          { label: "BUG CATEGORIES", value: "6" },
-          { label: "CLAIM TYPES", value: "11" },
-        ],
+        text: "Models are easy to demo and hard to evaluate. The plan is a seed repo with intentional documentation bugs — broken commands, outdated config keys, removed endpoints, renamed functions, stale example output, dead links — each with a fix-of-record. TruthGap's score becomes precision and recall against that ground truth, not a screenshot or a tweet thread. Building the benchmark is the next milestone.",
       },
       { type: "h", text: "What I'm still figuring out" },
       {
         type: "p",
-        text: "False positives are the killer. If TruthGap cries wolf five times before catching a real bug, nobody runs it again. The fix is being honest about confidence — every claim gets a tier (verified / probably / can't tell), and the CI integration only fails the build on verified.",
+        text: "False positives are the killer. If TruthGap flags five non-bugs before catching a real one, nobody runs it again. The fix is being honest about confidence — every claim gets a tier (verified / probably / can't tell), and the CI integration only fails the build on verified.",
       },
       {
         type: "quote",
@@ -151,7 +143,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
       },
       {
         type: "quote",
-        text: "Hackathons usually produce toys. This one shipped to an internal team and replaced a Google Sheet.",
+        text: "Most hackathons produce toys. This one produced a working state machine I'd be comfortable handing to a real finance team.",
       },
     ],
   },

@@ -9,7 +9,7 @@ export function SideQuests() {
     <section id="live" className="relative px-5 sm:px-10 py-24 sm:py-32">
       <div className="max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="02 · LIVE_FEED"
+          eyebrow="04 · LIVE_FEED"
           title="WHAT I'M DOING RIGHT NOW."
           sub="Two live feeds. One says I shipped a build today, the other says I queued ranked at midnight. Both are true."
         />

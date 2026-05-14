@@ -71,7 +71,7 @@ export function Career() {
     >
       <div className="max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="04 · CAREER"
+          eyebrow="02 · CAREER"
           title="WHERE I'VE SHIPPED."
           sub="Roles are matches. Stack is a loadout. Achievements are badges. Pick a tab — they all hold up."
         />

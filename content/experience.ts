@@ -22,17 +22,17 @@ export const experience: Experience[] = [
     end: "Present",
     tag: "RESEARCH",
     summary:
-      "Built reusable Python pipelines that turn raw fMRI and behavioral data into reviewable, subject-level reports.",
+      "Building reusable Python pipelines that turn raw fMRI and behavioral data into reviewable, subject-level reports.",
     kda: [
       { label: "SESSIONS", value: "1,000+" },
       { label: "METRICS", value: "20+" },
       { label: "TIME SAVED", value: "−60%" },
     ],
     bullets: [
-      "Behavioral analysis framework processing 1,000+ experiment sessions across 5 cognitive tasks.",
-      "Automated 20+ behavioral + linguistic metrics; recurring analysis time down 60%.",
-      "NLP pipeline: Word2Vec features → Ridge / RBF-SVR / XGBoost ensemble w/ 50-repeat nested split-half validation.",
-      "fMRI reliability pipeline computing Cronbach's α and Guttman's G6 across Schaefer atlas parcels.",
+      "Built a behavioral analysis framework processing 1,000+ experiment sessions across 5 cognitive tasks.",
+      "Automated 20+ behavioral and linguistic metrics, reducing recurring analysis time by 60%.",
+      "Developed an NLP pipeline using Word2Vec features with a Ridge / RBF-SVR / XGBoost ensemble, evaluated via 50-repeat nested split-half validation.",
+      "Implemented an fMRI reliability pipeline computing Cronbach's α and Guttman's G6 across Schaefer-atlas parcels.",
     ],
     stack: ["Python", "scikit-learn", "XGBoost", "Word2Vec", "fMRI"],
   },
@@ -45,16 +45,16 @@ export const experience: Experience[] = [
     end: "May 2025",
     tag: "STARTUP",
     summary:
-      "Made the app feel fast. Redesigned Firestore access patterns and killed dead React Native re-renders.",
+      "Improved app performance by redesigning Firestore access patterns and eliminating unnecessary React Native re-renders.",
     kda: [
       { label: "LATENCY", value: "−40%" },
       { label: "DEFECTS", value: "−30%" },
       { label: "FPS", value: "+35%" },
     ],
     bullets: [
-      "Redesigned Firestore queries + indexes — retrieval latency −40%, page loads −1.5s.",
+      "Redesigned Firestore queries and indexes, reducing retrieval latency by 40% and page loads by 1.5 seconds.",
       "Resolved 10+ production issues across TypeScript components and Firebase security rules.",
-      "Restructured state flow in React Native screens — responsiveness +35%.",
+      "Restructured state flow in React Native screens, improving UI responsiveness by 35%.",
     ],
     stack: ["TypeScript", "React Native", "Firebase", "Firestore"],
   },
@@ -67,16 +67,16 @@ export const experience: Experience[] = [
     end: "Jul 2023",
     tag: "ENTERPRISE",
     summary:
-      "Shipped JWT-secured Spring Boot APIs powering a healthcare platform with 10K+ patient records.",
+      "Built JWT-secured Spring Boot APIs for a healthcare platform managing 10K+ patient records.",
     kda: [
       { label: "APIS", value: "4" },
       { label: "RECORDS", value: "10K+" },
       { label: "LOOKUP", value: "+20%" },
     ],
     bullets: [
-      "JWT-secured authentication and authorization APIs (Spring Boot Security).",
-      "Service-layer refactor + indexed SQL — patient-record retrieval +20% efficiency.",
-      "Shipped 4 production REST APIs validated by 15 automated Swagger integration tests.",
+      "Built JWT-secured authentication and authorization APIs using Spring Boot Security.",
+      "Refactored the service layer and added SQL indexes, improving patient-record retrieval efficiency by 20%.",
+      "Shipped 4 production REST APIs, validated by 15 automated Swagger integration tests.",
     ],
     stack: ["Java", "Spring Boot", "JWT", "SQL", "Swagger"],
   },

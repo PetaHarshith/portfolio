@@ -10,9 +10,9 @@ export default function Home() {
   return (
     <main className="relative">
       <Hero />
-      <SideQuests />
-      <FeaturedDrops />
       <Career />
+      <FeaturedDrops />
+      <SideQuests />
       <CompanyShooter />
       <Connect />
       <Footer />

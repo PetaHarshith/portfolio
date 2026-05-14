@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 
 const tabs = [
   { id: "hero", label: "HOME" },
-  { id: "live", label: "LIVE" },
-  { id: "store", label: "STORE" },
   { id: "career", label: "CAREER" },
+  { id: "store", label: "STORE" },
+  { id: "live", label: "LIVE" },
   { id: "range", label: "RANGE" },
   { id: "connect", label: "CONNECT" },
 ];
