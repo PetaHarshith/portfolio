@@ -5,35 +5,48 @@ import { useCallback, useEffect, useRef, useState } from "react";
 type Line = { kind: "in" | "out"; text: string };
 
 const HELP = `available commands:
-  help        list commands
-  about       who is harshith
-  work        recent projects
-  skills      tech loadout
-  contact     ways to reach me
-  valorant    current rank
-  spotify     now playing
-  gg          good game
-  clear       clear screen
-  exit        close terminal`;
+  help          list commands
+  about         who is harshith
+  availability  current status, role, location
+  work          recent projects
+  skills        tech loadout
+  contact       ways to reach me
+  resume        download resume pdf
+  valorant      current rank
+  spotify       now playing
+  gg            good game
+  clear         clear screen
+  exit          close terminal`;
 
 const ABOUT = `harshith reddy peta · cs @ uw-madison · grad may 2026
-3 internships shipped, currently researching memory encoding
-with fmri data and building truthgap. occasionally diamond
-in valorant. probably listening to something right now.`;
+4 roles shipped across research, ai/ml, full-stack, and backend.
+currently building truthgap, running behavioral pipelines for
+prof. moreira's lab at uw, and probably listening to something
+right now. v hard to find offline. queue up in valorant if you do.`;
 
-const WORK = `▰ truthgap        ai doc checker · ts/next/llms (wip)
-▰ idea-fund       sales→finance workflow · hackathon · spring 2026
-▰ apptrack        full-stack job tracker · ec2/postgres
-▰ uw-research     behavioral analysis framework · python`;
+const AVAILABILITY = `[ status     ] available
+[ grad       ] may 2026
+[ roles      ] new grad swe · founding engineer
+[ location   ] open to relocate
+[ best email ] harshithapps47@gmail.com`;
 
-const SKILLS = `primary:   typescript · python · java · sql · c
-secondary: react · next.js · spring boot · react native
-utility:   postgres · firestore · aws · docker · ci/cd`;
+const WORK = `▰ truthgap      ai doc checker · ts/next/llms (wip, started may 2026)
+▰ idea-fund     sales-to-finance workflow · hackathon · spring 2026 (shipped)
+▰ apptrack      full-stack job tracker · ec2 + postgres (live)
+▰ uw-research   behavioral analysis framework · python (ongoing)`;
+
+const SKILLS = `primary:   typescript · python · java · sql · javascript · c · bash
+secondary: react · react native · next.js · spring boot · flask · docker · gsap
+utility:   postgres · firestore · mongodb · rest/websockets · aws · gcp · linux · ci-cd`;
 
 const CONTACT = `email     harshithapps47@gmail.com
 phone     +1 (608) 419-3565
-linkedin  /in/harshith-peta
-github    /harshithapps`;
+linkedin  linkedin.com/in/harshithpeta
+github    github.com/PetaHarshith
+web       harshithpeta.com`;
+
+const RESUME = `↓ resume.pdf  150 kb  ·  https://harshithpeta.com/resume.pdf
+opening in a new tab...`;
 
 const BANNER = ` ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰
    HARSHITH_OS shell v0.1.0 · type \`help\` to begin
@@ -65,6 +78,10 @@ export function Terminal() {
         case "about":
           print(ABOUT);
           break;
+        case "availability":
+        case "status":
+          print(AVAILABILITY);
+          break;
         case "work":
           print(WORK);
           break;
@@ -73,6 +90,11 @@ export function Terminal() {
           break;
         case "contact":
           print(CONTACT);
+          break;
+        case "resume":
+        case "cv":
+          print(RESUME);
+          window.open("/resume.pdf", "_blank", "noopener,noreferrer");
           break;
         case "valorant":
           print("fetching valorant...");
@@ -121,7 +143,7 @@ export function Terminal() {
           print("PLAYER_01");
           break;
         case "ls":
-          print("hero  side-quests  loadout  match-history  drops  achievements  connect");
+          print("hero/  career/  store/  live/  range/  connect/");
           break;
         case "date":
           print(new Date().toString());
