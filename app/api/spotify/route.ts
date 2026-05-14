@@ -2,8 +2,14 @@ import { NextResponse } from "next/server";
 import { fetchNowPlaying } from "@/lib/spotify";
 import { hasSpotify } from "@/lib/env";
 
-export const revalidate = 30;
 export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+
+const NO_CACHE = {
+  "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+  "CDN-Cache-Control": "no-store",
+  "Vercel-CDN-Cache-Control": "no-store",
+} as const;
 
 export async function GET() {
   if (!hasSpotify) {
@@ -20,14 +26,14 @@ export async function GET() {
         url: "#",
         mock: true,
       },
-      { status: 200 },
+      { status: 200, headers: NO_CACHE },
     );
   }
 
   try {
     const now = await fetchNowPlaying();
-    return NextResponse.json(now, { status: 200 });
+    return NextResponse.json(now, { status: 200, headers: NO_CACHE });
   } catch {
-    return NextResponse.json({ isPlaying: false }, { status: 200 });
+    return NextResponse.json({ isPlaying: false }, { status: 200, headers: NO_CACHE });
   }
 }

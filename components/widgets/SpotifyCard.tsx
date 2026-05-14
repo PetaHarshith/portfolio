@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { NowPlaying } from "@/lib/spotify";
 
 const MOCK: Extract<NowPlaying, { isPlaying: true }> = {
@@ -22,40 +22,70 @@ function fmt(ms: number) {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
+const VISIBLE_POLL_MS = 4000;
+const HIDDEN_POLL_MS = 30000;
+
 export function SpotifyCard() {
   const [data, setData] = useState<NowPlaying | null>(null);
   const [isMock, setIsMock] = useState(false);
   const [fetchedAt, setFetchedAt] = useState(() => Date.now());
   const [now, setNow] = useState(() => Date.now());
+  const cancelledRef = useRef(false);
+  const inFlightRef = useRef(false);
+  const lastLoadRef = useRef(0);
 
-  useEffect(() => {
-    let cancelled = false;
-    const load = async () => {
-      try {
-        const res = await fetch("/api/spotify", { cache: "no-store" });
-        const json = (await res.json()) as NowPlaying & { mock?: boolean };
-        if (cancelled) return;
-        setIsMock(Boolean(json.mock));
-        setData(json);
-        setFetchedAt(Date.now());
-      } catch {
-        if (cancelled) return;
-        setIsMock(true);
-        setData(MOCK);
-        setFetchedAt(Date.now());
-      }
-    };
-    load();
-    const id = setInterval(load, 10_000);
-    return () => {
-      cancelled = true;
-      clearInterval(id);
-    };
+  const load = useCallback(async () => {
+    if (inFlightRef.current) return;
+    inFlightRef.current = true;
+    lastLoadRef.current = Date.now();
+    try {
+      const res = await fetch(`/api/spotify?t=${Date.now()}`, { cache: "no-store" });
+      const json = (await res.json()) as NowPlaying & { mock?: boolean };
+      if (cancelledRef.current) return;
+      setIsMock(Boolean(json.mock));
+      setData(json);
+      setFetchedAt(Date.now());
+    } catch {
+      if (cancelledRef.current) return;
+      setIsMock(true);
+      setData(MOCK);
+      setFetchedAt(Date.now());
+    } finally {
+      inFlightRef.current = false;
+    }
   }, []);
 
   useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 500);
-    return () => clearInterval(id);
+    cancelledRef.current = false;
+    load();
+    let intervalId: number | undefined;
+    const startPolling = () => {
+      if (intervalId !== undefined) window.clearInterval(intervalId);
+      const ms = document.visibilityState === "visible" ? VISIBLE_POLL_MS : HIDDEN_POLL_MS;
+      intervalId = window.setInterval(load, ms);
+    };
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") {
+        // tab regained focus — only refetch if it's been more than 2s since the last load,
+        // otherwise just re-pace the timer
+        if (Date.now() - lastLoadRef.current > 2000) load();
+      }
+      startPolling();
+    };
+    startPolling();
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("focus", onVisibility);
+    return () => {
+      cancelledRef.current = true;
+      if (intervalId !== undefined) window.clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("focus", onVisibility);
+    };
+  }, [load]);
+
+  useEffect(() => {
+    const id = window.setInterval(() => setNow(Date.now()), 500);
+    return () => window.clearInterval(id);
   }, []);
 
   const showing = data ?? MOCK;
@@ -67,6 +97,15 @@ export function SpotifyCard() {
   const pct = isPlaying ? (progress / showing.durationMs) * 100 : 0;
   const isPaused = !isPlaying && "source" in showing && showing.source === "paused";
   const lastLabel = isPaused ? "PAUSED" : "LAST PLAYED";
+
+  // When the current track hits the end, refetch immediately so the next song lands fast.
+  useEffect(() => {
+    if (!isPlaying) return;
+    const remaining = showing.durationMs - progress;
+    if (remaining <= 0 && Date.now() - lastLoadRef.current > 1500) {
+      load();
+    }
+  }, [isPlaying, progress, showing, load]);
 
   return (
     <div className="hud bg-bg-2/50 p-6 sm:p-8 flex flex-col relative">
