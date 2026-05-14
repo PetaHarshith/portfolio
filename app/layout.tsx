@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, VT323, Bebas_Neue } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { GrainOverlay } from "@/components/hero/GrainOverlay";
@@ -83,6 +84,7 @@ export default function RootLayout({
           <div className="scanlines" aria-hidden />
           <div className="vignette" aria-hidden />
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
