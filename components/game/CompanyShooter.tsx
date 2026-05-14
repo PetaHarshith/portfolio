@@ -826,10 +826,6 @@ export function CompanyShooter() {
                 ))}
               </ol>
             )}
-
-            <div className="mt-auto pt-4 font-mono text-[10px] text-dim tracking-widest">
-              ▰ scores saved to your browser
-            </div>
           </div>
         </div>
       </div>
