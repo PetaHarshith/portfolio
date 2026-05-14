@@ -265,9 +265,37 @@ export function Hero() {
           </div>
         </div>
 
+        {/* Availability HUD strip */}
+        <div
+          className="mt-16 lg:mt-14 hud bg-bg-2/40 px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6"
+          data-hero-fade
+        >
+          <div className="flex items-center gap-3 font-mono text-sm tracking-[0.25em] text-mint shrink-0">
+            <span className="pulse-dot" />
+            AVAILABLE
+          </div>
+          <div className="hidden sm:block h-5 w-px bg-white/15" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-6 font-mono text-xs sm:text-sm w-full">
+            <div>
+              <span className="text-dim tracking-[0.25em]">▰ GRAD</span>
+              <span className="text-ink ml-2 tracking-widest">MAY 2026</span>
+            </div>
+            <div>
+              <span className="text-dim tracking-[0.25em]">▰ ROLES</span>
+              <span className="text-ink ml-2 tracking-widest">
+                NEW GRAD SWE · FOUNDING ENGINEER
+              </span>
+            </div>
+            <div>
+              <span className="text-dim tracking-[0.25em]">▰ LOCATION</span>
+              <span className="text-ink ml-2 tracking-widest">OPEN TO RELOCATE</span>
+            </div>
+          </div>
+        </div>
+
         {/* Stat bar bottom */}
-        <div className="mt-16 lg:mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono" data-hero-fade>
-          <Stat label="INTERNSHIPS" value="3" sub="shipped" />
+        <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono" data-hero-fade>
+          <Stat label="INTERNSHIPS" value="4" sub="shipped" />
           <Stat label="GPA" value="3.8" sub="dean's list 7×" accent="mint" />
           <Stat label="CERTS" value="2" sub="AWS · CP + DA" accent="cyan" />
           <Stat label="UPTIME" value="4 YRS" sub="since 2022" accent="amber" />
