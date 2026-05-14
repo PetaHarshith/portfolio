@@ -47,8 +47,8 @@ export const skills: SkillGroup[] = [
 
 export const achievements = [
   { label: "B.S. Computer Science", detail: "University of Wisconsin–Madison · 2022 – 2026" },
-  { label: "GPA 3.8", detail: "Dean's List — 7 semesters" },
+  { label: "GPA 3.8", detail: "Dean's List · 7 semesters" },
   { label: "Certificate in Consulting", detail: "UW–Madison" },
   { label: "AWS Certified Cloud Practitioner", detail: "Amazon Web Services" },
-  { label: "AWS Certified Developer — Associate", detail: "Amazon Web Services" },
+  { label: "AWS Certified Developer Associate", detail: "Amazon Web Services" },
 ];

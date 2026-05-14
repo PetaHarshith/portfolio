@@ -22,12 +22,12 @@ export const projectDetails: Record<string, ProjectDetail> = {
     eyebrow: "DROP_01 · WIP · May 2026 → present",
     subhead: "An AI documentation checker that catches READMEs telling fairy tales about your code.",
     intro:
-      "Code drifts. Documentation drifts faster. TruthGap is an early-stage project trying to fix that — combining a rule engine, structured LLM claim extraction, and a benchmark to actually measure whether the checker works. Just started this month.",
+      "Code drifts. Documentation drifts faster. TruthGap is an early-stage project trying to fix that. It combines a rule engine, structured LLM claim extraction, and a benchmark to actually measure whether the checker works. Just started this month.",
     blocks: [
       { type: "h", text: "Every README I've ever shipped lied to someone" },
       {
         type: "p",
-        text: "It's the universal new-hire ritual: clone the repo, copy the install command, watch it explode because the package was renamed nine months ago. The README isn't wrong on purpose — it's wrong because docs and code live in different files, get updated by different humans, on different days, with different definitions of 'done'. Drift is the default state.",
+        text: "It's the universal new-hire ritual: clone the repo, copy the install command, watch it explode because the package was renamed nine months ago. The README isn't wrong on purpose. It's wrong because docs and code live in different files, get updated by different humans, on different days, with different definitions of 'done'. Drift is the default state.",
       },
       {
         type: "callout",
@@ -44,21 +44,21 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         type: "list",
         items: [
-          "Rule-based pass first — extract every code block, command, file path, API endpoint, and config key the README references.",
-          "LLM claim extraction with structured output — each claim has a verb (\"this command does X\", \"this endpoint accepts Y\"), a target (a file, a route, a flag), and a quote from the docs.",
-          "Ground each claim against the real codebase via the GitHub API — does the file exist? does the command resolve? is the route still wired up?",
-          "Return the broken claim, the source-file evidence (a real line of real code), and a suggested fix. Not vibes — receipts.",
+          "Rule-based pass first: extract every code block, command, file path, API endpoint, and config key the README references.",
+          "LLM claim extraction with structured output. Each claim has a verb (\"this command does X\", \"this endpoint accepts Y\"), a target (a file, a route, a flag), and a quote from the docs.",
+          "Ground each claim against the real codebase via the GitHub API. Does the file exist? Does the command resolve? Is the route still wired up?",
+          "Return the broken claim, the source-file evidence (a real line of real code), and a suggested fix. Not vibes. Receipts.",
         ],
       },
       { type: "h", text: "The benchmark (planned)" },
       {
         type: "p",
-        text: "Models are easy to demo and hard to evaluate. The plan is a seed repo with intentional documentation bugs — broken commands, outdated config keys, removed endpoints, renamed functions, stale example output, dead links — each with a fix-of-record. TruthGap's score becomes precision and recall against that ground truth, not a screenshot or a tweet thread. Building the benchmark is the next milestone.",
+        text: "Models are easy to demo and hard to evaluate. The plan is a seed repo with intentional documentation bugs: broken commands, outdated config keys, removed endpoints, renamed functions, stale example output, dead links. Each one has a fix-of-record. TruthGap's score becomes precision and recall against that ground truth, not a screenshot or a tweet thread. Building the benchmark is the next milestone.",
       },
       { type: "h", text: "What I'm still figuring out" },
       {
         type: "p",
-        text: "False positives are the killer. If TruthGap flags five non-bugs before catching a real one, nobody runs it again. The fix is being honest about confidence — every claim gets a tier (verified / probably / can't tell), and the CI integration only fails the build on verified.",
+        text: "False positives are the killer. If TruthGap flags five non-bugs before catching a real one, nobody runs it again. The fix is being honest about confidence. Every claim gets a tier (verified, probably, or can't tell), and the CI integration only fails the build on verified.",
       },
       {
         type: "quote",
@@ -73,12 +73,12 @@ export const projectDetails: Record<string, ProjectDetail> = {
     eyebrow: "DROP_02 · SHIPPED · Spring 2026",
     subhead: "Six fields between a closed deal and an invoice. Built at the Idea Fund La Crosse Hackathon.",
     intro:
-      "Northwoods is a CRM that does one thing nobody else does well: it stops sales from handing finance a half-finished deal. The project name is boring on purpose — the engineering problem underneath is the most unexpectedly satisfying state machine I've ever shipped. $465K+ in deals tracked through it.",
+      "Northwoods is a CRM that does one thing nobody else does well: it stops sales from handing finance a half-finished deal. The project name is boring on purpose. The engineering problem underneath is the most unexpectedly satisfying state machine I've ever shipped. $465K+ in deals tracked through it.",
     blocks: [
       { type: "h", text: "The problem nobody mentions on the careers page" },
       {
         type: "p",
-        text: "A sales rep closes a deal. High-fives all around. The CRM updates. Then finance reaches for the invoice — and discovers nobody knows when the contract starts, the customer hasn't signed yet, or there's no billing contact on file. So the deal sits in limbo. Revenue waits. Three weeks later somebody schedules a reconciliation meeting. This happens, quietly, at every B2B company on earth.",
+        text: "A sales rep closes a deal. High-fives all around. The CRM updates. Then finance reaches for the invoice and discovers nobody knows when the contract starts, the customer hasn't signed yet, or there's no billing contact on file. So the deal sits in limbo. Revenue waits. Three weeks later somebody schedules a reconciliation meeting. This happens, quietly, at every B2B company on earth.",
       },
       {
         type: "callout",
@@ -89,7 +89,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
       { type: "h", text: "Readiness as a pure function" },
       {
         type: "p",
-        text: "The whole system pivots around one function. It takes a deal, its contacts, and its line items, and returns a status — blocked, warning, or ready — plus the list of fields that are missing and why.",
+        text: "The whole system pivots around one function. It takes a deal, its contacts, and its line items, and returns a status (blocked, warning, or ready), plus the list of fields that are missing and why.",
       },
       {
         type: "code",
@@ -104,18 +104,18 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         type: "list",
         items: [
-          "Contract start date — finance needs to know when to start billing.",
-          "Contract term — either a free-text term or a derived opportunity term.",
-          "Contract value — total contracted value, in dollars, non-zero.",
-          "Signed contract attached — boolean, not implied.",
-          "Billing contact — at least one contact on the account must be flagged as the billing contact.",
-          "Line items — at least one line item must be attached to the deal.",
+          "Contract start date. Finance needs to know when to start billing.",
+          "Contract term. Either a free-text term or a derived opportunity term.",
+          "Contract value. Total contracted value, in dollars, non-zero.",
+          "Signed contract attached. Boolean, not implied.",
+          "Billing contact. At least one contact on the account must be flagged as the billing contact.",
+          "Line items. At least one line item must be attached to the deal.",
         ],
       },
       { type: "h", text: "The most satisfying moment in B2B software" },
       {
         type: "p",
-        text: "When the readiness checker transitions a deal from blocked to ready, the backend auto-advances the deal's stage from 'needs info' to 'ready for invoice' in the same database write. Filling in the last missing field clears the deal from the inbox immediately — no manual promotion, no save button, no waiting for a sync. Just gone.",
+        text: "When the readiness checker transitions a deal from blocked to ready, the backend auto-advances the deal's stage from 'needs info' to 'ready for invoice' in the same database write. Filling in the last missing field clears the deal from the inbox immediately. No manual promotion, no save button, no waiting for a sync. Just gone.",
       },
       {
         type: "code",
@@ -153,7 +153,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
     eyebrow: "DROP_03 · LIVE · January 2026",
     subhead: "I built a full-stack job tracker because spreadsheets are where ambition goes to die.",
     intro:
-      "AppTrack is the kind of project you build because you genuinely need it. Cruel irony: I built the tracker faster than I got responses to the applications I tracked in it. It's a centralized dashboard, server-side paginated, with a real analytics layer — because the side effect of tracking your job search is finding out exactly how bad your response rate is.",
+      "AppTrack is the kind of project you build because you genuinely need it. Cruel irony: I built the tracker faster than I got responses to the applications I tracked in it. It's a centralized dashboard, server-side paginated, with a real analytics layer, because the side effect of tracking your job search is finding out exactly how bad your response rate is.",
     blocks: [
       { type: "h", text: "Spreadsheets are where ambition goes to die" },
       {
@@ -169,12 +169,12 @@ export const projectDetails: Record<string, ProjectDetail> = {
       { type: "h", text: "Pagination, indexes, and not loading everything" },
       {
         type: "p",
-        text: "The first version returned the full applications list on every keystroke. Fine at a dozen rows; obviously the wrong shape past that. I rewrote the table around Refine + react-table's server-side data provider: every search, filter, sort, and page-change hits a paginated endpoint backed by indexed columns. The dashboard charts are aggregated server-side too — one stats endpoint instead of N round-trips.",
+        text: "The first version returned the full applications list on every keystroke. Fine at a dozen rows; obviously the wrong shape past that. I rewrote the table around Refine + react-table's server-side data provider: every search, filter, sort, and page-change hits a paginated endpoint backed by indexed columns. The dashboard charts are aggregated server-side too, so one stats endpoint replaces N round-trips.",
       },
       { type: "h", text: "The state machine in disguise" },
       {
         type: "p",
-        text: "Application status is a finite state machine. You don't skip from 'Applied' to 'Offer' — there's a sequence. The data model bakes that in with a Postgres enum, and Zod validates the transitions on the boundary so a malformed request can't put a row into 'Offer' from nowhere.",
+        text: "Application status is a finite state machine. You don't skip from 'Applied' to 'Offer'. There's a sequence. The data model bakes that in with a Postgres enum, and Zod validates the transitions on the boundary so a malformed request can't put a row into 'Offer' from nowhere.",
       },
       {
         type: "code",
@@ -217,7 +217,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
       { type: "h", text: "Why behavioral research needs an engineer" },
       {
         type: "p",
-        text: "Neuroscience labs run on grad students with brilliant ideas and very little time. Behavioral analysis — turning raw experiment logs into reviewable, subject-level reports — was being done with ad-hoc CSV scripts. Each grad student rewrote a similar version. None of them composed across studies. Replacing that with one reusable pipeline freed up a meaningful percentage of the lab's analysis hours.",
+        text: "Neuroscience labs run on grad students with brilliant ideas and very little time. Behavioral analysis (turning raw experiment logs into reviewable, subject-level reports) was being done with ad-hoc CSV scripts. Each grad student rewrote a similar version. None of them composed across studies. Replacing that with one reusable pipeline freed up a meaningful percentage of the lab's analysis hours.",
       },
       {
         type: "callout",
@@ -232,12 +232,12 @@ export const projectDetails: Record<string, ProjectDetail> = {
       },
       {
         type: "p",
-        text: "Nothing about it is clever. Everything about it is reliable. That trade — boring code, predictable outputs — is the whole point for research infrastructure.",
+        text: "Nothing about it is clever. Everything about it is reliable. That trade (boring code, predictable outputs) is the whole point for research infrastructure.",
       },
       { type: "h", text: "The fMRI reliability pipeline" },
       {
         type: "p",
-        text: "The second piece I built was an fMRI reliability pipeline — it computes Cronbach's α and Guttman's G6 across subjects, Schaefer-atlas parcels, and three task conditions. In plain English: when a brain region lights up during a task, how confident are we that we'd see the same lighting next session?",
+        text: "The second piece I built was an fMRI reliability pipeline. It computes Cronbach's α and Guttman's G6 across subjects, Schaefer-atlas parcels, and three task conditions. In plain English: when a brain region lights up during a task, how confident are we that we'd see the same lighting next session?",
       },
       {
         type: "p",
@@ -246,7 +246,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
       { type: "h", text: "The NLP side quest" },
       {
         type: "p",
-        text: "Then there's the modeling pipeline I'm proudest of. Subjects respond to 30 memory-writing prompts. Their text gets turned into Word2Vec features. The pipeline runs 50-repeat nested split-half validation across Ridge, RBF-SVR, XGBoost, and an ensemble — comparing which model best predicts the memory metric we care about.",
+        text: "Then there's the modeling pipeline I'm proudest of. Subjects respond to 30 memory-writing prompts. Their text gets turned into Word2Vec features. The pipeline runs 50-repeat nested split-half validation across Ridge, RBF-SVR, XGBoost, and an ensemble, comparing which model best predicts the memory metric we care about.",
       },
       {
         type: "list",

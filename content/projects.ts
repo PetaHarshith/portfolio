@@ -20,7 +20,7 @@ export const projects: Project[] = [
     solution:
       "Combines rule-based extraction with structured LLM claim checking, grounded against the source via the GitHub API. Returns the broken claim, the line of code that disproves it, and a suggested fix. Early-stage build.",
     stack: ["TypeScript", "Next.js", "PostgreSQL", "GitHub API", "LLMs"],
-    date: "May 2026 — Present",
+    date: "May 2026 → Present",
     status: "WIP",
     accent: "magenta",
   },
@@ -31,7 +31,7 @@ export const projects: Project[] = [
     problem:
       "Deals were getting blocked downstream by missing billing contacts, stale approvals, and incomplete handoffs.",
     solution:
-      "Architected an Action Center that surfaces $465K+ in deals across ready-to-invoice, needs-info, and blocked states — eliminating the manual status-check loop between sales and finance.",
+      "Architected an Action Center that surfaces $465K+ in deals across ready-to-invoice, needs-info, and blocked states, eliminating the manual status-check loop between sales and finance.",
     stack: ["Express.js", "TypeScript", "PostgreSQL", "Workflow Automation"],
     date: "Spring 2026",
     status: "SHIPPED",
@@ -58,7 +58,7 @@ export const projects: Project[] = [
     solution:
       "Built subject-level QC outputs across 1,000+ sessions and 5 cognitive tasks; standardized 20+ behavioral + linguistic metrics. Recurring analysis time dropped 60%.",
     stack: ["Python", "Pandas", "scikit-learn", "Word2Vec"],
-    date: "Jun 2025 — Present",
+    date: "Jun 2025 → Present",
     status: "LIVE",
     accent: "amber",
   },

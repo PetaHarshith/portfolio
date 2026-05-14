@@ -55,7 +55,7 @@ export function Connect() {
         <SectionHeader
           eyebrow="06 · CONNECT"
           title="OPEN TO ROLES."
-          sub="If you're hiring engineers who actually like shipping — or building something weird and ambitious — reach out. I'm fastest on email."
+          sub="If you're hiring engineers who actually like shipping, or building something weird and ambitious, reach out. I'm fastest on email."
         />
 
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4">

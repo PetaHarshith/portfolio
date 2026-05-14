@@ -32,7 +32,7 @@ const bebas = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "Harshith Reddy Peta — PLAYER_01",
+  title: "Harshith Reddy Peta · PLAYER_01",
   description:
     "Engineer, researcher, and builder. CS @ UW–Madison. Shipping side quests since 2022.",
   metadataBase: new URL("https://www.harshithpeta.com"),
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Harshith Reddy Peta — PLAYER_01",
+    title: "Harshith Reddy Peta · PLAYER_01",
     description:
       "Engineer, researcher, and builder. CS @ UW–Madison. Shipping side quests since 2022.",
     url: "https://www.harshithpeta.com",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Harshith Reddy Peta — PLAYER_01",
+    title: "Harshith Reddy Peta · PLAYER_01",
     description:
       "Engineer, researcher, and builder. CS @ UW–Madison. Shipping side quests since 2022.",
   },

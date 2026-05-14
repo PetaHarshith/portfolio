@@ -36,7 +36,7 @@ linkedin  /in/harshith-peta
 github    /harshithapps`;
 
 const BANNER = ` ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰
-   HARSHITH_OS shell v0.1.0 — type \`help\` to begin
+   HARSHITH_OS shell v0.1.0 · type \`help\` to begin
  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰`;
 
 export function Terminal() {
@@ -92,12 +92,12 @@ export function Terminal() {
             const res = await fetch("/api/spotify", { cache: "no-store" });
             const j = await res.json();
             if (j.isPlaying) {
-              print(`▶ ${j.title} — ${j.artist}`);
+              print(`▶ ${j.title} · ${j.artist}`);
             } else if (j.lastPlayed) {
               const label = j.source === "paused" ? "❚❚ paused" : "● last played";
-              print(`${label}: ${j.lastPlayed.title} — ${j.lastPlayed.artist}`);
+              print(`${label}: ${j.lastPlayed.title} · ${j.lastPlayed.artist}`);
             } else {
-              print("● standby — nothing in the queue");
+              print("● standby. Nothing in the queue.");
             }
           } catch {
             print("[error] spotify api unavailable");

@@ -73,7 +73,7 @@ export function Career() {
         <SectionHeader
           eyebrow="02 · CAREER"
           title="WHERE I'VE SHIPPED."
-          sub="Roles are matches. Stack is a loadout. Achievements are badges. Pick a tab — they all hold up."
+          sub="Roles are matches. Stack is a loadout. Achievements are badges. Pick a tab, they all hold up."
         />
 
         {/* Lobby-style tabs */}

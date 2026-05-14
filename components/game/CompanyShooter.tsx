@@ -142,7 +142,7 @@ export function CompanyShooter() {
       return;
     }
     if (leaderboard.some((e) => e.name === clean)) {
-      setError(`"${clean}" is taken — pick a different tag.`);
+      setError(`"${clean}" is taken. Pick a different tag.`);
       return;
     }
     setError(null);
@@ -577,7 +577,7 @@ export function CompanyShooter() {
         <SectionHeader
           eyebrow="05 · FIRING_RANGE"
           title="SHOOT THE COMPANIES."
-          sub="60 seconds. Click company names to take them down. Hit them fast for combo multipliers. Top 10 scores stick around — leave your tag."
+          sub="60 seconds. Click company names to take them down. Hit them fast for combo multipliers. Top 10 scores stick around, so leave your tag."
         />
 
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-5">
@@ -622,7 +622,7 @@ export function CompanyShooter() {
                     <p className="mt-4 max-w-md mx-auto font-mono text-sm text-dim">
                       60 seconds. Aim. Click. Build combos for bigger multipliers.
                       <span className="block mt-1 text-[#ff003c]">
-                        ⚠ Avoid the red pulsing ones — bombs cost you −1000.
+                        ⚠ Avoid the red pulsing ones. Bombs cost you −1000.
                       </span>
                     </p>
                     <button
