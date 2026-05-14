@@ -177,9 +177,15 @@ export function Terminal() {
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 50);
       document.body.style.overflow = "hidden";
+      window.dispatchEvent(new CustomEvent("portfolio:lock-scroll"));
     } else {
       document.body.style.overflow = "";
+      window.dispatchEvent(new CustomEvent("portfolio:unlock-scroll"));
     }
+    return () => {
+      document.body.style.overflow = "";
+      window.dispatchEvent(new CustomEvent("portfolio:unlock-scroll"));
+    };
   }, [open]);
 
   useEffect(() => {
@@ -222,7 +228,9 @@ export function Terminal() {
         </div>
         <div
           ref={scrollerRef}
-          className="flex-1 overflow-y-auto px-4 py-3 font-mono text-base sm:text-lg text-mint leading-relaxed"
+          data-lenis-prevent
+          onWheel={(e) => e.stopPropagation()}
+          className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 font-mono text-base sm:text-lg text-mint leading-relaxed"
         >
           {lines.map((l, i) => (
             <pre
