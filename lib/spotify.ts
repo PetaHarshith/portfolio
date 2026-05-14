@@ -17,13 +17,14 @@ export type NowPlaying =
     }
   | {
       isPlaying: false;
+      source?: "paused" | "recent";
       lastPlayed?: {
         title: string;
         artist: string;
         album: string;
         albumArt: string;
         url: string;
-        playedAt: string;
+        playedAt?: string;
       };
     };
 
@@ -62,6 +63,7 @@ async function fetchRecentlyPlayed(token: string): Promise<NowPlaying> {
   if (!item?.track) return { isPlaying: false };
   return {
     isPlaying: false,
+    source: "recent",
     lastPlayed: {
       title: item.track.name as string,
       artist: (item.track.artists as { name: string }[]).map((a) => a.name).join(", "),
@@ -93,14 +95,22 @@ export async function fetchNowPlaying(): Promise<NowPlaying> {
     return fetchRecentlyPlayed(token);
   }
 
-  return {
-    isPlaying: Boolean(data.is_playing),
+  const track = {
     title: data.item.name as string,
     artist: (data.item.artists as { name: string }[]).map((a) => a.name).join(", "),
     album: data.item.album?.name as string,
     albumArt: data.item.album?.images?.[0]?.url as string,
+    url: data.item.external_urls?.spotify as string,
+  };
+
+  if (!data.is_playing) {
+    return { isPlaying: false, source: "paused", lastPlayed: track };
+  }
+
+  return {
+    isPlaying: true,
+    ...track,
     progressMs: data.progress_ms as number,
     durationMs: data.item.duration_ms as number,
-    url: data.item.external_urls?.spotify as string,
   };
 }

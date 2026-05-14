@@ -259,7 +259,7 @@ export function Hero() {
           <Stat label="INTERNSHIPS" value="3" sub="shipped" />
           <Stat label="GPA" value="3.8" sub="dean's list 7×" accent="mint" />
           <Stat label="CERTS" value="2" sub="AWS · CP + DA" accent="cyan" />
-          <Stat label="UPTIME" value="3 YRS" sub="since 2022" accent="amber" />
+          <Stat label="UPTIME" value="4 YRS" sub="since 2022" accent="amber" />
         </div>
       </div>
 

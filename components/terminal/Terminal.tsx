@@ -91,7 +91,14 @@ export function Terminal() {
           try {
             const res = await fetch("/api/spotify", { cache: "no-store" });
             const j = await res.json();
-            print(j.isPlaying ? `▶ ${j.title} — ${j.artist}` : "● standby — not playing anything");
+            if (j.isPlaying) {
+              print(`▶ ${j.title} — ${j.artist}`);
+            } else if (j.lastPlayed) {
+              const label = j.source === "paused" ? "❚❚ paused" : "● last played";
+              print(`${label}: ${j.lastPlayed.title} — ${j.lastPlayed.artist}`);
+            } else {
+              print("● standby — nothing in the queue");
+            }
           } catch {
             print("[error] spotify api unavailable");
           }

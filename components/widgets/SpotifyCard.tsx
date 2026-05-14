@@ -59,6 +59,8 @@ export function SpotifyCard() {
   const isPlaying = showing.isPlaying;
   const progress = isPlaying ? Math.min(showing.progressMs + tick * 1000, showing.durationMs) : 0;
   const pct = isPlaying ? (progress / showing.durationMs) * 100 : 0;
+  const isPaused = !isPlaying && "source" in showing && showing.source === "paused";
+  const lastLabel = isPaused ? "PAUSED" : "LAST PLAYED";
 
   return (
     <div className="hud bg-bg-2/50 p-6 sm:p-8 flex flex-col relative">
@@ -106,8 +108,11 @@ export function SpotifyCard() {
             className="w-28 h-28 sm:w-32 sm:h-32 rounded-sm object-cover ring-1 ring-magenta/30 shadow-[0_0_24px_rgba(255,70,85,0.25)] opacity-80"
           />
           <div className="flex-1 min-w-0">
-            <div className="font-mono text-[10px] tracking-[0.3em] text-dim mb-1">
-              LAST PLAYED
+            <div
+              className="font-mono text-[10px] tracking-[0.3em] mb-1"
+              style={{ color: isPaused ? "var(--color-amber)" : "var(--color-ink-dim)" }}
+            >
+              ▰ {lastLabel}
             </div>
             <div className="font-headline uppercase tracking-wide text-2xl sm:text-3xl truncate">
               {showing.lastPlayed.title}
