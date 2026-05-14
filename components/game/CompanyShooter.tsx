@@ -57,7 +57,6 @@ const ACCENTS = ["#ff4655", "#14f195", "#6ee7ff", "#ffd166"];
 const GAME_DURATION = 60;
 const COMBO_WINDOW = 1500;
 const FLOAT_LIFE = 800;
-const LEADERBOARD_KEY = "portfolio_leaderboard_v1";
 
 type GameState = "idle" | "playing" | "ended";
 
@@ -71,6 +70,7 @@ export function CompanyShooter() {
   const [leaderboard, setLeaderboard] = useState<LeaderEntry[]>([]);
   const [name, setName] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // All game state lives in a ref so we don't re-render every frame.
@@ -95,12 +95,22 @@ export function CompanyShooter() {
     flash: 0,
   });
 
-  // Load leaderboard on mount
+  // Load leaderboard from the shared backend on mount.
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(LEADERBOARD_KEY);
-      if (raw) setLeaderboard(JSON.parse(raw) as LeaderEntry[]);
-    } catch {}
+    let cancelled = false;
+    fetch("/api/leaderboard", { cache: "no-store" })
+      .then((res) => res.json())
+      .then((data: { board?: LeaderEntry[] }) => {
+        if (!cancelled && Array.isArray(data?.board)) {
+          setLeaderboard(data.board);
+        }
+      })
+      .catch(() => {
+        // leave leaderboard empty if the API is unreachable
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const startGame = useCallback(() => {
@@ -122,6 +132,7 @@ export function CompanyShooter() {
     setBestCombo(0);
     setTimeLeft(GAME_DURATION);
     setSubmitted(false);
+    setSubmitting(false);
     setName("");
     setError(null);
     setState("playing");
@@ -135,32 +146,45 @@ export function CompanyShooter() {
     setState("ended");
   }, []);
 
-  const submitScore = useCallback(() => {
+  const submitScore = useCallback(async () => {
+    if (submitting) return;
     const clean = name.trim().slice(0, 14).toUpperCase();
     if (!clean) {
       setError("Tag required.");
       return;
     }
+    // Fast client-side dup check for instant feedback; server enforces too.
     if (leaderboard.some((e) => e.name === clean)) {
       setError(`"${clean}" is taken. Pick a different tag.`);
       return;
     }
     setError(null);
-    const entry: LeaderEntry = {
-      name: clean,
-      score: g.current.score,
-      combo: g.current.bestCombo,
-      date: new Date().toISOString(),
-    };
-    const next = [...leaderboard, entry]
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10);
-    setLeaderboard(next);
+    setSubmitting(true);
     try {
-      localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(next));
-    } catch {}
-    setSubmitted(true);
-  }, [leaderboard, name]);
+      const res = await fetch("/api/leaderboard", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: clean,
+          score: Math.floor(g.current.score),
+          combo: Math.floor(g.current.bestCombo),
+        }),
+      });
+      const data = (await res.json()) as
+        | { ok: true; board: LeaderEntry[] }
+        | { ok: false; error: string };
+      if (!res.ok || !data.ok) {
+        setError(("error" in data && data.error) || "Couldn't submit. Try again.");
+        return;
+      }
+      setLeaderboard(data.board);
+      setSubmitted(true);
+    } catch {
+      setError("Network error. Try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }, [leaderboard, name, submitting]);
 
   // Resize canvas with DPR
   useEffect(() => {
@@ -682,10 +706,10 @@ export function CompanyShooter() {
                             />
                             <button
                               type="submit"
-                              disabled={!name.trim()}
+                              disabled={!name.trim() || submitting}
                               className="font-headline uppercase tracking-wider text-lg px-5 py-2 bg-magenta text-[#070b16] disabled:opacity-40 hover:bg-magenta/90 transition-colors"
                             >
-                              SUBMIT
+                              {submitting ? "SUBMITTING…" : "SUBMIT"}
                             </button>
                           </div>
                           {error && (
