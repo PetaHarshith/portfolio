@@ -8,6 +8,11 @@ import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const PHOTOS = ["/photo-1.jpg?v=3", "/photo-2.jpg?v=3", "/photo-3.jpg?v=3"];
 
+// Module-level so the array reference is stable across Hero re-renders;
+// passing this inline would re-mount GlitchText's effect every render and
+// pin the cycle to the first transition.
+const ROLES = ["engineer.exe", "researcher.exe", "full_stack.exe", "builder.exe"];
+
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const [photoIdx, setPhotoIdx] = useState(0);
@@ -111,14 +116,7 @@ export function Hero() {
 
             <div className="mt-6 font-mono text-base sm:text-lg text-cyan" data-hero-fade>
               <span className="text-dim">&gt; </span>
-              <GlitchText
-                words={[
-                  "engineer.exe",
-                  "researcher.exe",
-                  "full_stack.exe",
-                  "builder.exe",
-                ]}
-              />
+              <GlitchText words={ROLES} />
               <span className="text-dim"> ── ONLINE</span>
             </div>
 
