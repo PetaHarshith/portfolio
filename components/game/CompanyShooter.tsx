@@ -73,6 +73,9 @@ export function CompanyShooter() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Session token issued by the server at match start; consumed on submit.
+  const sessionRef = useRef<string | null>(null);
+
   // All game state lives in a ref so we don't re-render every frame.
   const g = useRef({
     targets: [] as Target[],
@@ -136,6 +139,20 @@ export function CompanyShooter() {
     setName("");
     setError(null);
     setState("playing");
+    // Request a fresh proof-of-play token. Submission still works without
+    // one if the call fails (server returns a clear error), but the happy
+    // path attaches it.
+    sessionRef.current = null;
+    fetch("/api/leaderboard/session", { cache: "no-store" })
+      .then((res) => res.json())
+      .then((data: { ok?: boolean; token?: string }) => {
+        if (data?.ok && typeof data.token === "string") {
+          sessionRef.current = data.token;
+        }
+      })
+      .catch(() => {
+        // best-effort; submit will surface a friendly error if missing
+      });
   }, []);
 
   const endGame = useCallback(() => {
@@ -153,9 +170,18 @@ export function CompanyShooter() {
       setError("Tag required.");
       return;
     }
-    // Fast client-side dup check for instant feedback; server enforces too.
-    if (leaderboard.some((e) => e.name === clean)) {
-      setError(`"${clean}" is taken. Pick a different tag.`);
+    // Fast client-side hint: if this tag already exists at a higher score,
+    // the server will reject. Show the message immediately. (Server still
+    // enforces.)
+    const prior = leaderboard.find((e) => e.name === clean);
+    if (prior && prior.score >= Math.floor(g.current.score)) {
+      setError(
+        `"${clean}" already scored ${prior.score.toLocaleString()}. Beat it to update.`,
+      );
+      return;
+    }
+    if (!sessionRef.current) {
+      setError("Session expired. Start a new match.");
       return;
     }
     setError(null);
@@ -168,6 +194,7 @@ export function CompanyShooter() {
           name: clean,
           score: Math.floor(g.current.score),
           combo: Math.floor(g.current.bestCombo),
+          session: sessionRef.current,
         }),
       });
       const data = (await res.json()) as

@@ -1,9 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
 import {
   checkRateLimit,
+  consumeSession,
   getLeaderboard,
   submitEntry,
 } from "@/lib/leaderboard";
+import { clientIp } from "@/lib/clientIp";
 
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
@@ -24,17 +26,14 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("x-real-ip") ||
-    "unknown";
+  const ip = clientIp(req);
 
   let allowed = true;
   try {
     allowed = await checkRateLimit(ip);
   } catch {
     // Fail open if Redis is briefly unreachable for the rate-limit hop;
-    // submitEntry still validates the payload separately.
+    // the session token still gates whether this submission is accepted.
   }
   if (!allowed) {
     return NextResponse.json(
@@ -58,7 +57,12 @@ export async function POST(req: NextRequest) {
       { status: 400, headers: NO_CACHE },
     );
   }
-  const body = parsed as { name?: unknown; score?: unknown; combo?: unknown };
+  const body = parsed as {
+    name?: unknown;
+    score?: unknown;
+    combo?: unknown;
+    session?: unknown;
+  };
   if (
     typeof body.name !== "string" ||
     typeof body.score !== "number" ||
@@ -71,10 +75,14 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    // Proof-of-play: token is HMAC-signed at match start and single-use
+    // via Redis GETDEL. The gate runs only after shape/precondition checks
+    // pass, so a rejected submission doesn't burn the player's token.
     const result = await submitEntry({
       name: body.name,
       score: body.score,
       combo: body.combo,
+      gate: () => consumeSession(body.session).catch(() => false),
     });
     if (!result.ok) {
       return NextResponse.json(result, { status: 400, headers: NO_CACHE });
