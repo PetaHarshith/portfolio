@@ -266,29 +266,40 @@ export function Hero() {
         </div>
 
         {/* Availability HUD strip */}
-        <div
-          className="mt-16 lg:mt-14 hud bg-bg-2/40 px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6"
-          data-hero-fade
-        >
-          <div className="flex items-center gap-3 font-mono text-sm tracking-[0.25em] text-mint shrink-0">
-            <span className="pulse-dot" />
-            AVAILABLE
-          </div>
-          <div className="hidden sm:block h-5 w-px bg-white/15" />
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-6 font-mono text-xs sm:text-sm w-full">
-            <div>
-              <span className="text-dim tracking-[0.25em]">▰ GRAD</span>
-              <span className="text-ink ml-2 tracking-widest">MAY 2026</span>
+        <div className="mt-16 lg:mt-14 relative" data-hero-fade>
+          {/* Red glow rail on the left */}
+          <div
+            className="absolute left-0 top-0 bottom-0 w-[3px]"
+            style={{
+              background: "var(--color-magenta)",
+              boxShadow: "0 0 18px var(--color-magenta), 0 0 36px rgba(255,70,85,0.4)",
+            }}
+            aria-hidden
+          />
+          <div className="hud bg-bg-2/70 backdrop-blur-sm pl-7 sm:pl-9 pr-5 sm:pr-7 py-5 sm:py-6 flex flex-col lg:flex-row lg:items-stretch gap-5 lg:gap-8">
+            {/* AVAILABLE block */}
+            <div className="flex items-center gap-4 shrink-0">
+              <span className="pulse-dot" style={{ width: 14, height: 14 }} />
+              <div className="flex flex-col">
+                <div className="font-mono text-[10px] tracking-[0.35em] text-mint/80">
+                  [ STATUS ]
+                </div>
+                <div
+                  className="font-headline uppercase tracking-wider text-3xl sm:text-4xl text-mint leading-none mt-1"
+                  style={{ textShadow: "0 0 24px rgba(20,241,149,0.5)" }}
+                >
+                  AVAILABLE
+                </div>
+              </div>
             </div>
-            <div>
-              <span className="text-dim tracking-[0.25em]">▰ ROLES</span>
-              <span className="text-ink ml-2 tracking-widest">
-                NEW GRAD SWE · FOUNDING ENGINEER
-              </span>
-            </div>
-            <div>
-              <span className="text-dim tracking-[0.25em]">▰ LOCATION</span>
-              <span className="text-ink ml-2 tracking-widest">OPEN TO RELOCATE</span>
+
+            <div className="hidden lg:block w-px bg-white/15" />
+
+            {/* Field grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-7 flex-1">
+              <Field label="GRAD" value="MAY 2026" />
+              <Field label="ROLES" value="NEW GRAD SWE · FOUNDING ENGINEER" />
+              <Field label="LOCATION" value="OPEN TO RELOCATE" />
             </div>
           </div>
         </div>
@@ -331,6 +342,19 @@ export function Hero() {
         </div>
       </div>
     </section>
+  );
+}
+
+function Field({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex flex-col">
+      <div className="font-mono text-[10px] tracking-[0.35em] text-dim">
+        ▰ {label}
+      </div>
+      <div className="font-headline uppercase tracking-wider text-xl sm:text-2xl text-ink leading-tight mt-1.5">
+        {value}
+      </div>
+    </div>
   );
 }
 

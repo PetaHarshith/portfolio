@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const tabs = [
   { id: "hero", label: "HOME" },
@@ -14,6 +14,9 @@ const tabs = [
 export function Nav() {
   const [now, setNow] = useState("");
   const [active, setActive] = useState("hero");
+  // Suppresses observer-driven updates while a click-triggered scroll is in flight,
+  // so the clicked tab stays highlighted even as other sections cross the viewport band.
+  const lockUntilRef = useRef(0);
 
   useEffect(() => {
     const update = () =>
@@ -29,20 +32,46 @@ export function Nav() {
   }, []);
 
   useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActive(visible.target.id);
-      },
-      { rootMargin: "-40% 0px -40% 0px", threshold: [0.1, 0.5, 0.9] },
-    );
-    tabs.forEach((t) => {
-      const el = document.getElementById(t.id);
-      if (el) obs.observe(el);
-    });
-    return () => obs.disconnect();
+    const recomputeActive = () => {
+      if (Date.now() < lockUntilRef.current) return;
+      // Pick the section whose center is closest to the viewport center.
+      const vh = window.innerHeight;
+      const target = vh / 2;
+      let best: { id: string; dist: number } | null = null;
+      for (const t of tabs) {
+        const el = document.getElementById(t.id);
+        if (!el) continue;
+        const r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) continue;
+        const center = (r.top + r.bottom) / 2;
+        const dist = Math.abs(center - target);
+        if (!best || dist < best.dist) best = { id: t.id, dist };
+      }
+      if (best) setActive(best.id);
+    };
+
+    recomputeActive();
+    window.addEventListener("scroll", recomputeActive, { passive: true });
+    window.addEventListener("resize", recomputeActive);
+    return () => {
+      window.removeEventListener("scroll", recomputeActive);
+      window.removeEventListener("resize", recomputeActive);
+    };
+  }, []);
+
+  const handleTabClick = useCallback((id: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    setActive(id);
+    // Block observer-driven overrides for the duration of the animated scroll.
+    lockUntilRef.current = Date.now() + 1400;
+    const el = document.getElementById(id);
+    if (!el) return;
+    const lenis = window.__lenis;
+    if (lenis) {
+      lenis.scrollTo(el, { offset: -16, duration: 1.0 });
+    } else {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }, []);
 
   return (
@@ -67,6 +96,7 @@ export function Nav() {
               <a
                 key={t.id}
                 href={`#${t.id}`}
+                onClick={handleTabClick(t.id)}
                 className="relative px-2 sm:px-4 py-1 transition-colors"
                 style={{ color: isActive ? "var(--color-mint)" : "var(--color-ink-dim)" }}
               >
