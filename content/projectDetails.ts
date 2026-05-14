@@ -143,7 +143,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
       },
       {
         type: "quote",
-        text: "Most hackathons produce toys. This one produced a working state machine I'd be comfortable handing to a real finance team.",
+        text: "Hackathons usually produce toys. This one shipped to an internal team and replaced a Google Sheet.",
       },
     ],
   },
@@ -166,18 +166,10 @@ export const projectDetails: Record<string, ProjectDetail> = {
         label: "THE STACK",
         text: "React 18 + TypeScript + Vite on the front. Express + Drizzle + Zod on the back. PostgreSQL with status enums in the middle. Recharts for the analytics layer. Refine for the data plumbing.",
       },
-      { type: "h", text: "The latency obsession" },
+      { type: "h", text: "Pagination, indexes, and not loading everything" },
       {
         type: "p",
-        text: "The first version returned the full applications list every keystroke. It was fine at 12 rows. At 100 rows it took ~500ms per request. So I rewrote the table around Refine + react-table's server-side data provider: every search, filter, sort, and page-change hits a paginated endpoint with indexed columns. Final p50: ~200ms. The dashboard charts are aggregated server-side too — one stats endpoint instead of N round-trips.",
-      },
-      {
-        type: "stats",
-        items: [
-          { label: "P50 LATENCY", value: "~200ms" },
-          { label: "FROM", value: "~500ms" },
-          { label: "TRACK TIME", value: "−40%" },
-        ],
+        text: "The first version returned the full applications list on every keystroke. Fine at a dozen rows; obviously the wrong shape past that. I rewrote the table around Refine + react-table's server-side data provider: every search, filter, sort, and page-change hits a paginated endpoint backed by indexed columns. The dashboard charts are aggregated server-side too — one stats endpoint instead of N round-trips.",
       },
       { type: "h", text: "The state machine in disguise" },
       {

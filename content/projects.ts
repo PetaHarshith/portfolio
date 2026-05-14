@@ -40,10 +40,10 @@ export const projects: Project[] = [
   {
     id: "apptrack",
     name: "AppTrack",
-    tagline: "Full-stack job application tracker — 40% less manual tracking.",
+    tagline: "Full-stack job application tracker I actually use.",
     problem: "Spreadsheets don't paginate, don't analyze, and don't deploy.",
     solution:
-      "Express + Postgres backend with request validation, indexed queries, Dockerized deployment, CI/CD on EC2. Average API latency dropped from ~500ms to under ~200ms.",
+      "Express + Postgres backend with request validation, indexed queries, server-side pagination, and Dockerized deployment on EC2. Recharts dashboard for status + funnel views. Inline-editable table replaces the usual edit form.",
     stack: ["React", "TypeScript", "Node.js", "Express", "PostgreSQL", "AWS"],
     date: "Jan 2026",
     status: "LIVE",

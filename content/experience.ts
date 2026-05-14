@@ -37,6 +37,29 @@ export const experience: Experience[] = [
     stack: ["Python", "scikit-learn", "XGBoost", "Word2Vec", "fMRI"],
   },
   {
+    id: "soundsafe",
+    role: "Junior AI/ML Engineer Intern",
+    company: "SoundSafe.ai",
+    location: "Chicago, IL · Remote",
+    start: "May 2025",
+    end: "Aug 2025",
+    tag: "STARTUP",
+    summary:
+      "Built shared audio preprocessing and verification services that standardized the ML pipeline across multiple detection models.",
+    kda: [
+      { label: "DETECTION", value: "98%+" },
+      { label: "LATENCY", value: "<750ms" },
+      { label: "FUSION", value: "+30%" },
+    ],
+    bullets: [
+      "Developed a configurable SharedAudioPreprocessor (VAD, Mel-spectrogram, MFCC, RMS) that unified preprocessing across 4 downstream models and reduced cross-team data bugs by 50%.",
+      "Built a RESTful WatermarkVerificationService reaching 98%+ detection accuracy on test audio with processing latency under 750ms.",
+      "Partnered with the anomaly-detection team to integrate deepfake, anomaly, and behavioral models into the UTS pipeline, delivering sub-second inference and improving multi-event detection efficiency by 40%.",
+      "Co-designed the AudioFusionEngine, combining multi-model outputs via weighted fusion logic into a unified threat score; improved threat classification accuracy by 30% on benchmark datasets.",
+    ],
+    stack: ["Python", "PyTorch", "Audio ML", "REST APIs", "Signal Processing"],
+  },
+  {
     id: "take2",
     role: "Full-Stack Software Engineer Intern",
     company: "Take2",

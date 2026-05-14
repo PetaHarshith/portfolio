@@ -25,7 +25,8 @@ function fmt(ms: number) {
 export function SpotifyCard() {
   const [data, setData] = useState<NowPlaying | null>(null);
   const [isMock, setIsMock] = useState(false);
-  const [tick, setTick] = useState(0);
+  const [fetchedAt, setFetchedAt] = useState(() => Date.now());
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     let cancelled = false;
@@ -36,14 +37,16 @@ export function SpotifyCard() {
         if (cancelled) return;
         setIsMock(Boolean(json.mock));
         setData(json);
+        setFetchedAt(Date.now());
       } catch {
         if (cancelled) return;
         setIsMock(true);
         setData(MOCK);
+        setFetchedAt(Date.now());
       }
     };
     load();
-    const id = setInterval(load, 30_000);
+    const id = setInterval(load, 10_000);
     return () => {
       cancelled = true;
       clearInterval(id);
@@ -51,13 +54,16 @@ export function SpotifyCard() {
   }, []);
 
   useEffect(() => {
-    const id = setInterval(() => setTick((t) => t + 1), 1000);
+    const id = setInterval(() => setNow(Date.now()), 500);
     return () => clearInterval(id);
   }, []);
 
   const showing = data ?? MOCK;
   const isPlaying = showing.isPlaying;
-  const progress = isPlaying ? Math.min(showing.progressMs + tick * 1000, showing.durationMs) : 0;
+  const elapsed = isPlaying ? Math.max(0, now - fetchedAt) : 0;
+  const progress = isPlaying
+    ? Math.min(showing.progressMs + elapsed, showing.durationMs)
+    : 0;
   const pct = isPlaying ? (progress / showing.durationMs) * 100 : 0;
   const isPaused = !isPlaying && "source" in showing && showing.source === "paused";
   const lastLabel = isPaused ? "PAUSED" : "LAST PLAYED";
