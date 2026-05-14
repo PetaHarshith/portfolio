@@ -156,6 +156,17 @@ export function Hero() {
               </MagneticButton>
               <MagneticButton
                 as="a"
+                href="/resume.pdf"
+                download="harshith-peta-resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-headline uppercase tracking-wider text-xl sm:text-2xl px-8 py-4 border border-mint text-mint hover:bg-mint/10 transition-colors"
+                style={{ clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)" }}
+              >
+                ↓ RESUME
+              </MagneticButton>
+              <MagneticButton
+                as="a"
                 href="#connect"
                 className="font-headline uppercase tracking-wider text-xl sm:text-2xl px-8 py-4 border border-magenta text-magenta hover:bg-magenta/10 transition-colors"
                 style={{ clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)" }}

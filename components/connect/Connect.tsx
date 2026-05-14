@@ -9,24 +9,35 @@ const LINKS = [
     value: "harshithapps47@gmail.com",
     href: "mailto:harshithapps47@gmail.com",
     accent: "magenta",
+    download: false,
+  },
+  {
+    label: "RESUME",
+    value: "↓ DOWNLOAD PDF",
+    href: "/resume.pdf",
+    accent: "mint",
+    download: true,
   },
   {
     label: "LINKEDIN",
     value: "/in/harshithpeta",
     href: "https://www.linkedin.com/in/harshithpeta/",
     accent: "cyan",
+    download: false,
   },
   {
     label: "GITHUB",
     value: "/PetaHarshith",
     href: "https://github.com/PetaHarshith",
     accent: "mint",
+    download: false,
   },
   {
     label: "PHONE",
     value: "+1 (608) 419-3565",
     href: "tel:+16084193565",
     accent: "amber",
+    download: false,
   },
 ] as const;
 
@@ -53,7 +64,11 @@ export function Connect() {
               key={l.label}
               as="a"
               href={l.href}
-              {...(l.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              {...(l.download
+                ? { download: "harshith-peta-resume.pdf", target: "_blank", rel: "noopener noreferrer" }
+                : l.href.startsWith("http")
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
               className="hud bg-bg-2/40 p-7 sm:p-8 flex items-center justify-between gap-4 group transition-colors hover:bg-bg-2/80"
             >
               <div className="text-left">
