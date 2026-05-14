@@ -13,19 +13,25 @@ const LINES = [
 ];
 
 export function BootScreen() {
-  const [visible, setVisible] = useState(false);
+  // Default visible so SSR ships the overlay and it paints with the rest of
+  // the page — no portfolio flash before hydration. The pre-hydration script
+  // in app/layout.tsx hides it via CSS for revisitors / reduced-motion users.
+  const [visible, setVisible] = useState(true);
   const [progress, setProgress] = useState(0);
   const [lineIdx, setLineIdx] = useState(0);
   const [done, setDone] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (sessionStorage.getItem("booted") === "1") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      sessionStorage.setItem("booted", "1");
+    if (sessionStorage.getItem("booted") === "1") {
+      setVisible(false);
       return;
     }
-    setVisible(true);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      sessionStorage.setItem("booted", "1");
+      setVisible(false);
+      return;
+    }
     document.body.style.overflow = "hidden";
 
     const lineTimer = setInterval(() => {
@@ -53,6 +59,8 @@ export function BootScreen() {
     if (!done) return;
     const dismiss = () => {
       sessionStorage.setItem("booted", "1");
+      document.documentElement.classList.remove("booting");
+      document.documentElement.dataset.booted = "1";
       document.body.style.overflow = "";
       setVisible(false);
     };
@@ -72,7 +80,10 @@ export function BootScreen() {
   const filled = Math.round((progress / 100) * blocks);
 
   return (
-    <div className="fixed inset-0 z-[90] bg-[#0a0f1c] font-mono text-mint flex flex-col items-center justify-center px-6">
+    <div
+      data-boot-overlay
+      className="fixed inset-0 z-[90] bg-[#0a0f1c] font-mono text-mint flex flex-col items-center justify-center px-6"
+    >
       <div className="hud bg-bg-2/60 w-full max-w-2xl p-6 sm:p-8">
         <p className="text-xs sm:text-sm tracking-widest text-magenta mb-4">
           ▰▰ HARSHITH_OS v0.1.0 ─ booting

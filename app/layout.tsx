@@ -71,6 +71,21 @@ export default function RootLayout({
       lang="en"
       className={`${spaceGrotesk.variable} ${vt323.variable} ${bebas.variable} h-full antialiased`}
     >
+      <head>
+        {/* Pre-hydration: decide whether the boot overlay should paint at all.
+            Runs synchronously before first paint so revisitors never flash. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var b=sessionStorage.getItem('booted')==='1';var r=window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(b||r){document.documentElement.dataset.booted='1';if(r&&!b)sessionStorage.setItem('booted','1');}else{document.documentElement.classList.add('booting');}}catch(e){}`,
+          }}
+        />
+        <style
+          dangerouslySetInnerHTML={{
+            __html:
+              "html.booting,html.booting body{overflow:hidden}html[data-booted] [data-boot-overlay]{display:none!important}",
+          }}
+        />
+      </head>
       <body className="min-h-full">
         <Providers>
           <BootScreen />
