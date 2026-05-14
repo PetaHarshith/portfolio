@@ -25,11 +25,22 @@ function fmt(ms: number) {
 const VISIBLE_POLL_MS = 4000;
 const HIDDEN_POLL_MS = 30000;
 
+type LastKnown = {
+  title: string;
+  artist: string;
+  album: string;
+  albumArt: string;
+  url: string;
+};
+
+const LAST_KNOWN_KEY = "spotify:lastKnown";
+
 export function SpotifyCard() {
   const [data, setData] = useState<NowPlaying | null>(null);
   const [isMock, setIsMock] = useState(false);
   const [fetchedAt, setFetchedAt] = useState(() => Date.now());
   const [now, setNow] = useState(() => Date.now());
+  const [lastKnown, setLastKnown] = useState<LastKnown | null>(null);
   const cancelledRef = useRef(false);
   const inFlightRef = useRef(false);
   const lastLoadRef = useRef(0);
@@ -54,6 +65,43 @@ export function SpotifyCard() {
       inFlightRef.current = false;
     }
   }, []);
+
+  // Hydrate the last-known track from localStorage so a long pause across reloads
+  // still falls back to the previously seen track instead of [ STANDBY ].
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(LAST_KNOWN_KEY);
+      if (raw) setLastKnown(JSON.parse(raw) as LastKnown);
+    } catch {}
+  }, []);
+
+  // Whenever the API returns a playing or paused/recent track, remember it.
+  useEffect(() => {
+    if (!data || isMock) return;
+    let snapshot: LastKnown | null = null;
+    if (data.isPlaying) {
+      snapshot = {
+        title: data.title,
+        artist: data.artist,
+        album: data.album,
+        albumArt: data.albumArt,
+        url: data.url,
+      };
+    } else if (data.lastPlayed) {
+      snapshot = {
+        title: data.lastPlayed.title,
+        artist: data.lastPlayed.artist,
+        album: data.lastPlayed.album,
+        albumArt: data.lastPlayed.albumArt,
+        url: data.lastPlayed.url,
+      };
+    }
+    if (!snapshot) return;
+    setLastKnown(snapshot);
+    try {
+      window.localStorage.setItem(LAST_KNOWN_KEY, JSON.stringify(snapshot));
+    } catch {}
+  }, [data, isMock]);
 
   useEffect(() => {
     cancelledRef.current = false;
@@ -144,32 +192,40 @@ export function SpotifyCard() {
             </div>
           </div>
         </div>
-      ) : "lastPlayed" in showing && showing.lastPlayed ? (
-        <div className="flex gap-5 items-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={showing.lastPlayed.albumArt}
-            alt=""
-            className="w-28 h-28 sm:w-32 sm:h-32 rounded-sm object-cover ring-1 ring-magenta/30 shadow-[0_0_24px_rgba(255,70,85,0.25)] opacity-80"
-          />
-          <div className="flex-1 min-w-0">
-            <div
-              className="font-mono text-[10px] tracking-[0.3em] mb-1"
-              style={{ color: isPaused ? "var(--color-amber)" : "var(--color-ink-dim)" }}
-            >
-              ▰ {lastLabel}
+      ) : ("lastPlayed" in showing && showing.lastPlayed) || lastKnown ? (
+        (() => {
+          const track =
+            "lastPlayed" in showing && showing.lastPlayed
+              ? showing.lastPlayed
+              : (lastKnown as LastKnown);
+          return (
+            <div className="flex gap-5 items-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={track.albumArt}
+                alt=""
+                className="w-28 h-28 sm:w-32 sm:h-32 rounded-sm object-cover ring-1 ring-magenta/30 shadow-[0_0_24px_rgba(255,70,85,0.25)] opacity-80"
+              />
+              <div className="flex-1 min-w-0">
+                <div
+                  className="font-mono text-[10px] tracking-[0.3em] mb-1"
+                  style={{ color: isPaused ? "var(--color-amber)" : "var(--color-ink-dim)" }}
+                >
+                  ▰ {lastLabel}
+                </div>
+                <div className="font-headline uppercase tracking-wide text-2xl sm:text-3xl truncate">
+                  {track.title}
+                </div>
+                <div className="font-mono text-base text-dim truncate mt-1">
+                  {track.artist}
+                </div>
+                <div className="font-mono text-xs text-dim truncate uppercase tracking-widest mt-1">
+                  {track.album}
+                </div>
+              </div>
             </div>
-            <div className="font-headline uppercase tracking-wide text-2xl sm:text-3xl truncate">
-              {showing.lastPlayed.title}
-            </div>
-            <div className="font-mono text-base text-dim truncate mt-1">
-              {showing.lastPlayed.artist}
-            </div>
-            <div className="font-mono text-xs text-dim truncate uppercase tracking-widest mt-1">
-              {showing.lastPlayed.album}
-            </div>
-          </div>
-        </div>
+          );
+        })()
       ) : (
         <div className="font-mono text-dim">
           <div className="text-magenta font-headline text-2xl tracking-wide">[ STANDBY ]</div>
